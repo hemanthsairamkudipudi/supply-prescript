@@ -1,0 +1,5 @@
+shipment_mode,relative_cost
+Sea,0.70
+Rail,0.90
+Truck,1.00
+Air,1.50
