@@ -58,6 +58,7 @@ def main():
     print("\n===== TRANSIT DAYS =====")
     print(df.groupby("is_delayed")["transit_days"].describe())
 
+
     print("\n===== WEATHER SCORE =====")
     print(df.groupby("is_delayed")["weather_score"].describe())
 
