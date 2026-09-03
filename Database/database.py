@@ -1,7 +1,7 @@
 import sqlite3
 
 from pathlib import Path
-
+import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 
@@ -130,6 +130,36 @@ def get_predictions():
 
     return rows
 
+def get_predictions_dataframe():
+
+    connection = get_connection()
+
+    query = """
+        SELECT
+            id,
+            supplier_name,
+            shipment_mode,
+            transit_path,
+            transit_days,
+            weather_score,
+            delay_probability,
+            predicted_delay,
+            recommended_mode,
+            operator_decision,
+            actual_outcome,
+            created_at
+        FROM predictions
+        ORDER BY created_at DESC
+    """
+
+    dataframe = pd.read_sql_query(
+        query,
+        connection
+    )
+
+    connection.close()
+
+    return dataframe
 
 if __name__ == "__main__":
 

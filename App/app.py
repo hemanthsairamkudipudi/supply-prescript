@@ -29,7 +29,8 @@ from prescribe import recommend_action
 
 from database import (
     initialize_database,
-    save_prediction
+    save_prediction,
+    get_predictions_dataframe
 )
 
 
@@ -88,7 +89,8 @@ page = st.sidebar.radio(
     "Go to",
     [
         "📊 Dashboard",
-        "🚚 Shipment Prediction"
+        "🚚 Shipment Prediction",
+        "🗃️ Decision History"
     ]
 )
 
@@ -284,7 +286,6 @@ elif page == "🚚 Shipment Prediction":
 
     st.sidebar.header("Shipment Information")
 
-
     supplier = st.sidebar.selectbox(
         "Supplier",
         [
@@ -294,7 +295,6 @@ elif page == "🚚 Shipment Prediction":
             "Supplier_D"
         ]
     )
-
 
     mode = st.sidebar.selectbox(
         "Current Shipment Mode",
@@ -306,7 +306,6 @@ elif page == "🚚 Shipment Prediction":
         ]
     )
 
-
     transit_path = st.sidebar.selectbox(
         "Transit Path",
         [
@@ -317,14 +316,12 @@ elif page == "🚚 Shipment Prediction":
         ]
     )
 
-
     transit_days = st.sidebar.number_input(
         "Transit Days",
         min_value=1,
         max_value=100,
         value=20
     )
-
 
     weather_score = st.sidebar.number_input(
         "Weather Score",
@@ -351,6 +348,42 @@ elif page == "🚚 Shipment Prediction":
             weather_score
         )
 
+        results, best = recommend_action(
+            supplier,
+            mode,
+            transit_path,
+            transit_days,
+            weather_score
+        )
+
+        # Store results in session state
+        st.session_state["prediction"] = prediction
+        st.session_state["probability"] = probability
+        st.session_state["results"] = results
+        st.session_state["best"] = best
+
+        # Store shipment information
+        st.session_state["supplier"] = supplier
+        st.session_state["mode"] = mode
+        st.session_state["transit_path"] = transit_path
+        st.session_state["transit_days"] = transit_days
+        st.session_state["weather_score"] = weather_score
+
+        # Reset save message
+        st.session_state["decision_saved"] = False
+
+
+    # ========================================================
+    # SHOW RESULTS AFTER ANALYSIS
+    # ========================================================
+
+    if "prediction" in st.session_state:
+
+        prediction = st.session_state["prediction"]
+        probability = st.session_state["probability"]
+        results = st.session_state["results"]
+        best = st.session_state["best"]
+
 
         st.divider()
 
@@ -362,7 +395,6 @@ elif page == "🚚 Shipment Prediction":
         st.header("Prediction")
 
         col1, col2 = st.columns(2)
-
 
         with col1:
 
@@ -395,16 +427,6 @@ elif page == "🚚 Shipment Prediction":
             "Prescriptive Recommendation"
         )
 
-
-        results, best = recommend_action(
-            supplier,
-            mode,
-            transit_path,
-            transit_days,
-            weather_score
-        )
-
-
         st.success(
             f"Recommended shipment mode: "
             f"**{best['shipment_mode']}**"
@@ -417,7 +439,6 @@ elif page == "🚚 Shipment Prediction":
 
         display_results = results.copy()
 
-
         display_results[
             "delay_probability"
         ] = (
@@ -425,7 +446,6 @@ elif page == "🚚 Shipment Prediction":
                 "delay_probability"
             ] * 100
         ).round(2)
-
 
         display_results[
             "score"
@@ -435,9 +455,9 @@ elif page == "🚚 Shipment Prediction":
             ].round(4)
         )
 
-
         display_results = display_results.rename(
             columns={
+
                 "shipment_mode":
                     "Shipment Mode",
 
@@ -451,7 +471,6 @@ elif page == "🚚 Shipment Prediction":
                     "Decision Score"
             }
         )
-
 
         st.dataframe(
             display_results,
@@ -469,7 +488,8 @@ elif page == "🚚 Shipment Prediction":
                 "Accepted Recommendation",
                 "Rejected Recommendation",
                 "Manual Decision"
-            ]
+            ],
+            key="operator_decision"
         )
 
 
@@ -483,28 +503,188 @@ elif page == "🚚 Shipment Prediction":
 
             save_prediction(
 
-                supplier_name=supplier,
+                supplier_name=st.session_state["supplier"],
 
-                shipment_mode=mode,
+                shipment_mode=st.session_state["mode"],
 
-                transit_path=transit_path,
+                transit_path=st.session_state["transit_path"],
 
-                transit_days=transit_days,
+                transit_days=st.session_state["transit_days"],
 
-                weather_score=weather_score,
+                weather_score=st.session_state["weather_score"],
 
-                delay_probability=probability,
+                delay_probability=st.session_state["probability"],
 
-                predicted_delay=prediction,
+                predicted_delay=st.session_state["prediction"],
 
-                recommended_mode=best[
-                    "shipment_mode"
-                ],
+                recommended_mode=st.session_state[
+                    "best"
+                ]["shipment_mode"],
 
                 operator_decision=operator_decision
             )
 
+            st.session_state["decision_saved"] = True
+
+
+        if st.session_state.get(
+            "decision_saved",
+            False
+        ):
 
             st.success(
-                "Decision saved successfully."
+                "✅ Decision saved successfully. "
+                "You can view it in Decision History."
             )
+
+# ============================================================
+# DECISION HISTORY
+# ============================================================
+
+elif page == "🗃️ Decision History":
+
+    st.header("🗃️ Decision History")
+
+    st.write(
+        "View previous shipment predictions, recommendations, "
+        "and operator decisions."
+    )
+
+    history_df = get_predictions_dataframe()
+
+    if history_df.empty:
+
+        st.info(
+            "No shipment decisions have been saved yet."
+        )
+
+    else:
+
+        st.subheader("🔍 Filters")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+
+            suppliers = ["All"] + sorted(
+                history_df["supplier_name"]
+                .dropna()
+                .unique()
+                .tolist()
+            )
+
+            selected_supplier = st.selectbox(
+                "Supplier",
+                suppliers
+            )
+
+        with col2:
+
+            modes = ["All"] + sorted(
+                history_df["shipment_mode"]
+                .dropna()
+                .unique()
+                .tolist()
+            )
+
+            selected_mode = st.selectbox(
+                "Shipment Mode",
+                modes
+            )
+
+        with col3:
+
+            decisions = ["All"] + sorted(
+                history_df["operator_decision"]
+                .dropna()
+                .unique()
+                .tolist()
+            )
+
+            selected_decision = st.selectbox(
+                "Operator Decision",
+                decisions
+            )
+
+        filtered_df = history_df.copy()
+
+        if selected_supplier != "All":
+            filtered_df = filtered_df[
+                filtered_df["supplier_name"]
+                == selected_supplier
+            ]
+
+        if selected_mode != "All":
+            filtered_df = filtered_df[
+                filtered_df["shipment_mode"]
+                == selected_mode
+            ]
+
+        if selected_decision != "All":
+            filtered_df = filtered_df[
+                filtered_df["operator_decision"]
+                == selected_decision
+            ]
+
+        st.divider()
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric(
+                "Total Decisions",
+                len(filtered_df)
+            )
+
+        with col2:
+            accepted = (
+                filtered_df["operator_decision"]
+                == "Accepted Recommendation"
+            ).sum()
+
+            st.metric(
+                "Accepted",
+                int(accepted)
+            )
+
+        with col3:
+            rejected = (
+                filtered_df["operator_decision"]
+                == "Rejected Recommendation"
+            ).sum()
+
+            st.metric(
+                "Rejected",
+                int(rejected)
+            )
+
+        display_history = filtered_df.copy()
+
+        display_history["delay_probability"] = (
+            display_history["delay_probability"] * 100
+        ).round(2)
+
+        display_history = display_history.rename(
+            columns={
+                "id": "ID",
+                "supplier_name": "Supplier",
+                "shipment_mode": "Current Mode",
+                "transit_path": "Transit Path",
+                "transit_days": "Transit Days",
+                "weather_score": "Weather Score",
+                "delay_probability": "Delay Probability (%)",
+                "predicted_delay": "Predicted Delay",
+                "recommended_mode": "Recommended Mode",
+                "operator_decision": "Operator Decision",
+                "actual_outcome": "Actual Outcome",
+                "created_at": "Created At"
+            }
+        )
+
+        st.subheader("📋 Previous Decisions")
+
+        st.dataframe(
+            display_history,
+            use_container_width=True,
+            hide_index=True
+        )
