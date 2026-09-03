@@ -407,7 +407,7 @@ This project was developed as part of an internship project.
 * Suru Sriram
 * Lalam Poorna sai
 * Garima Sharma
-* Sneha Mahesh Dixit
+* Sneha Dixit
 * Akshaj Somani
 
 ---
