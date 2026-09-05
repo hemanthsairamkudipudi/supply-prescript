@@ -12,14 +12,15 @@ The system analyzes shipment information such as supplier, shipment mode, transi
 
 The main objectives of Supply Prescript are:
 
-Analyze past shipment data to understand shipping patterns.
-Identify the factors that cause shipment delays.
-Predict whether a shipment is likely to be delayed.
-Calculate the likelihood or probability of a shipment delay.
-Compare different shipment modes.
-Recommend the most suitable shipment mode.
-Save shipment predictions and operator decisions.
-Provide a simple and user-friendly web interface for supply chain operations.
+* Analyze historical shipment data.
+* Identify factors associated with shipment delays.
+* Predict whether a shipment is likely to be delayed.
+* Calculate the probability of shipment delay.
+* Evaluate alternative shipment modes.
+* Recommend the most suitable shipment mode.
+* Store shipment predictions and operator decisions.
+* Provide an easy-to-use web interface for supply chain operations.
+
 
 ---
 
@@ -29,12 +30,12 @@ Provide a simple and user-friendly web interface for supply chain operations.
 
 The system analyzes historical shipment data to understand:
 
-* Supplier performance
-* Shipment mode performance
-* Transit path performance
-* Transit duration
-* Weather conditions
-* Overall shipment delay rate
+* Evaluate supplier performance.
+* Analyze the performance of different shipment modes.
+* Assess transit path performance.
+* Measure shipment transit duration.
+* Examine the impact of weather conditions.
+* Calculate the overall shipment delay rate.
 
 ### 2. Delay Prediction
 
