@@ -98,13 +98,14 @@ The application is built using Streamlit.
 
 Users can:
 
-1. Enter shipment information.
-2. Analyze the shipment.
-3. View the delay prediction.
-4. View delay probability.
-5. View alternative shipment modes.
-6. View the recommended shipment mode.
-7. Record the operator's decision.
+1. Enter the required shipment details.
+2. Analyze the shipment information.
+3. Check the shipment delay prediction.
+4. View the probability of shipment delay.
+5. Explore alternative shipment modes.
+6. Check the recommended shipment mode.
+7. Save the operator's final decision.
+
 
 ---
 
