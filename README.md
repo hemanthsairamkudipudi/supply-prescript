@@ -418,17 +418,17 @@ This project was developed as part of an internship project.
 
 Possible future improvements include:
 
-* Adding more historical shipment data.
-* Adding real-time weather information.
-* Adding actual transportation costs.
-* Adding inventory information.
-* Adding delivery priority.
-* Adding route optimization.
-* Improving the machine learning model.
-* Adding interactive dashboards and visualizations.
-* Adding user authentication.
-* Deploying the application online.
-* Adding feedback-based model retraining.
+* Include more historical shipment data for better analysis.
+* Integrate real-time weather information.
+* Include actual transportation cost details.
+* Add inventory-related information.
+* Consider delivery priority while making decisions.
+* Implement route optimization features.
+* Improve the accuracy and performance of the machine learning model.
+* Add interactive dashboards and data visualizations.
+* Implement user authentication for secure access.
+* Deploy the application online for wider accessibility.
+* Retrain the model using feedback and new data.
 
 ---
 
