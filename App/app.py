@@ -432,6 +432,55 @@ elif page == "🚚 Shipment Prediction":
             f"**{best['shipment_mode']}**"
         )
 
+        # ====================================================
+        # RECOMMENDATION EXPLANATION
+        # ====================================================
+
+        recommended_mode = best["shipment_mode"]
+
+        recommended_delay = best["delay_probability"]
+
+        recommended_cost = best["relative_cost"]
+
+        recommended_score = best["score"]
+
+        max_cost = results["relative_cost"].max()
+
+        normalized_cost = (
+            recommended_cost / max_cost
+        )
+
+        st.info(
+            f"💡 **Why was {recommended_mode} recommended?**\n\n"
+            f"The system selected **{recommended_mode}** because "
+            f"it has the lowest overall decision score among the "
+            f"available shipment modes.\n\n"
+            f"**Delay Probability:** "
+            f"{recommended_delay:.2%}\n\n"
+            f"**Relative Cost:** "
+            f"{recommended_cost:.2f}\n\n"
+            f"**Decision Score:** "
+            f"{recommended_score:.4f}"
+        )
+
+        st.caption(
+            "The decision score combines 70% delay risk and "
+            "30% relative transportation cost."
+        )
+
+        # ====================================================
+        # COMPARISON WITH OTHER MODES
+        # ====================================================
+
+        second_best = results.iloc[1]
+
+        st.write(
+            f"Compared with the next-best option "
+            f"(**{second_best['shipment_mode']}**), "
+            f"{recommended_mode} has a decision score of "
+            f"**{recommended_score:.4f}** compared with "
+            f"**{second_best['score']:.4f}**."
+        )
 
         # ====================================================
         # RESULTS TABLE
