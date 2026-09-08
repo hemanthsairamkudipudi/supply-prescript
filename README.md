@@ -21,7 +21,6 @@ The main objectives of Supply Prescript are:
 * Store shipment predictions and operator decisions.
 * Provide an easy-to-use web interface for supply chain operations.
 
-
 ---
 
 ## ✨ Key Features
@@ -30,12 +29,12 @@ The main objectives of Supply Prescript are:
 
 The system analyzes historical shipment data to understand:
 
-* Evaluate supplier performance.
-* Analyze the performance of different shipment modes.
-* Assess transit path performance.
-* Measure shipment transit duration.
-* Examine the impact of weather conditions.
-* Calculate the overall shipment delay rate.
+* Supplier performance
+* Shipment mode performance
+* Transit path performance
+* Transit duration
+* Weather conditions
+* Overall shipment delay rate
 
 ### 2. Delay Prediction
 
@@ -98,14 +97,13 @@ The application is built using Streamlit.
 
 Users can:
 
-1. Enter the required shipment details.
-2. Analyze the shipment information.
-3. Check the shipment delay prediction.
-4. View the probability of shipment delay.
-5. Explore alternative shipment modes.
-6. Check the recommended shipment mode.
-7. Save the operator's final decision.
-
+1. Enter shipment information.
+2. Analyze the shipment.
+3. View the delay prediction.
+4. View delay probability.
+5. View alternative shipment modes.
+6. View the recommended shipment mode.
+7. Record the operator's decision.
 
 ---
 
@@ -418,20 +416,22 @@ This project was developed as part of an internship project.
 
 Possible future improvements include:
 
-* Include more historical shipment data for better analysis.
-* Integrate real-time weather information.
-* Include actual transportation cost details.
-* Add inventory-related information.
-* Consider delivery priority while making decisions.
-* Implement route optimization features.
-* Improve the accuracy and performance of the machine learning model.
-* Add interactive dashboards and data visualizations.
-* Implement user authentication for secure access.
-* Deploy the application online for wider accessibility.
-* Retrain the model using feedback and new data.
+* Adding more historical shipment data.
+* Adding real-time weather information.
+* Adding actual transportation costs.
+* Adding inventory information.
+* Adding delivery priority.
+* Adding route optimization.
+* Improving the machine learning model.
+* Adding interactive dashboards and visualizations.
+* Adding user authentication.
+* Deploying the application online.
+* Adding feedback-based model retraining.
 
 ---
 
 ## 📄 License
 
 This project is developed for educational and internship purposes.
+
+
