@@ -81,15 +81,15 @@ Shipment predictions and operator decisions can be stored in a local SQLite data
 
 The stored information includes:
 
-* Supplier
+* Supplier details
 * Shipment mode
 * Transit path
-* Transit days
+* Number of transit days
 * Weather score
-* Delay probability
-* Predicted delay
+* Probability of shipment delay
+* Predicted shipment delay
 * Recommended shipment mode
-* Operator decision
+* Operator’s final decision
 
 ### 6. Web Application
 
